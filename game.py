@@ -20,11 +20,13 @@ class Game:
         self.clock = pygame.time.Clock()
         self.windowed = False
         self.clicked = False
+        self.active_level = 0
         asyncio.run(self.main())
 
     async def main(self):
         current_frame = f.LevelFrame(self)
         current_frame.load()
+
         self.clock.tick(60)
 
         while True:
