@@ -19,7 +19,6 @@ aaronite
 aaronitic
 aarrgh
 aarrghh
-aaru
 aasvogel
 aasvogels
 ab
@@ -20000,19 +19999,15 @@ armsize
 armstrong
 armure
 armures
-arn
-arna
 arnatta
 arnatto
 arnattos
 arnaut
 arnberry
-arne
 arneb
 arnebia
 arnee
 arnement
-arni
 arnica
 arnicas
 arnold
@@ -94670,8 +94665,6 @@ eagres
 ealderman
 ealdorman
 ealdormen
-eam
-ean
 eaning
 eanling
 eanlings
@@ -103975,7 +103968,6 @@ errorless
 errors
 errs
 errsyn
-ers
 ersar
 ersatz
 ersatzes
@@ -124063,7 +124055,6 @@ gephyrocercy
 gephyrophobia
 gepidae
 gepoun
-ger
 geraera
 gerah
 gerahs
@@ -124277,7 +124268,6 @@ gerrymandered
 gerrymanderer
 gerrymandering
 gerrymanders
-gers
 gersdorffite
 gershom
 gershon
@@ -152391,8 +152381,6 @@ infusories
 infusoriform
 infusorioid
 infusorium
-ing
-inga
 ingaevones
 ingaevonic
 ingallantry
@@ -169905,7 +169893,6 @@ leekish
 leeks
 leelane
 leelang
-leep
 leepit
 leer
 leered
@@ -172606,9 +172593,6 @@ limuloidea
 limuloids
 limulus
 limurite
-lin
-lyn
-lina
 linable
 linac
 linaceae
@@ -172767,7 +172751,6 @@ lineup
 lineups
 linewalker
 linework
-ling
 linga
 lingayat
 lingala
@@ -172781,7 +172764,6 @@ lyngbyeae
 lingbird
 lingcod
 lingcods
-linge
 lingel
 lingenberry
 lingence
@@ -209838,7 +209820,6 @@ oakum
 oakums
 oakweb
 oakwood
-oam
 oannes
 oar
 oarage
@@ -211451,11 +211432,9 @@ oenothera
 oenotheraceae
 oenotheraceous
 oenotrian
-oer
 oerlikon
 oersted
 oersteds
-oes
 oesogi
 oesophagal
 oesophageal
@@ -213113,8 +213092,6 @@ oozing
 oozoa
 oozoid
 oozooid
-op
-opa
 opacate
 opacify
 opacification
@@ -213129,9 +213106,6 @@ opacities
 opacous
 opacousness
 opacus
-opah
-opahs
-opai
 opaion
 opal
 opaled
@@ -266580,7 +266554,6 @@ reknot
 reknotted
 reknotting
 reknow
-rel
 relabel
 relabeled
 relabeling
@@ -272883,7 +272856,6 @@ rimstone
 rimu
 rimula
 rimulose
-rin
 rinaldo
 rinceau
 rinceaux

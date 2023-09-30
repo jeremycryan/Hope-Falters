@@ -8,12 +8,15 @@ import math, time
 class Grid:
     pass
 
-    def __init__(self, path, frame):
+    def __init__(self, path, frame, offset):
+        self.offset = offset
         self.victory_tile = None
         self.grabbed_tile = None
         self.grab_position = None
         self.drag_direction = None
         self.grabbed_shape = None
+        title_font = pygame.font.Font("assets/fonts/Rudiment.ttf", 30)
+        self.title_font_dict = {char: title_font.render(char,True,(255, 255, 0)) for char in c.CHARS}
         self.title = ""
         self.width, self.height = self.load_from_file(f"levels/{path}")
 
@@ -23,9 +26,17 @@ class Grid:
         self.frame = frame
         self.win_shake_occurred = False
 
-        self.title_letters = [GridObject.FONT_DICT[char] for char in self.title]
+        self.title_letters = [self.title_font_dict[char] for char in f'"{self.title}"']
 
+        self.tutorial_screen = None
+        if path=="test_level.txt":
+            self.tutorial_screen = ImageManager.load("assets/images/beginnings_help.png")
 
+        self.flash = ImageManager.load("assets/images/flash.png")
+        self.flash.set_alpha(0)
+
+        self.exit_glow = ImageManager.load("assets/images/exit_glow.png")
+        self.exit_glow.set_alpha(0)
 
     def load_from_file(self, path):
         with open(path) as f:
@@ -47,12 +58,12 @@ class Grid:
              c.CENTER_Y + offset[1] - c.TILE_SIZE * (effective_height - 1) // 2),
             (c.CENTER_X + offset[0]- c.TILE_SIZE * (effective_width - 1) // 2,
              c.CENTER_Y + offset[1]+ c.TILE_SIZE * (effective_height - 1) // 2),
-            (c.CENTER_X + offset[0]+ c.TILE_SIZE * (effective_width - 1) // 2,
+            (c.CENTER_X + offset[0]+ c.TILE_SIZE * (effective_width - 1) // 2 - 2,
              c.CENTER_Y + offset[1]+ c.TILE_SIZE * (effective_height - 1) // 2),
-            (c.CENTER_X + offset[0]+ c.TILE_SIZE * (effective_width - 1) // 2,
+            (c.CENTER_X + offset[0]+ c.TILE_SIZE * (effective_width - 1) // 2 - 2,
              c.CENTER_Y + offset[1]- c.TILE_SIZE * (effective_height - 1) // 2),
         ]
-        pygame.draw.polygon(surface, c.WHITE, corners, 1)
+        pygame.draw.polygon(surface, (50, 50, 50), corners, 2)
 
     def calculate_victory_tile(self):
         for grid_object, x, y in self.all_grid_objects_and_position():
@@ -61,7 +72,17 @@ class Grid:
                 self.tiles[y][x] = None
 
     def draw(self, surface, offset=(0, 0)):
+
+        offset = offset[0] + self.offset[0], offset[1] + self.offset[1]
+
         title_width = sum([char.get_width() for char in self.title_letters])
+        x = c.CENTER_X - title_width//2 + offset[0]
+        y = 25 + offset[1]
+        for char in self.title_letters:
+            surface.blit(char, (x, y))
+            x += char.get_width()
+
+
 
         self.draw_perimeter(surface, offset)
 
@@ -72,10 +93,7 @@ class Grid:
         for ty, row in enumerate(self.tiles):
             x = x0
             for tx, tile in enumerate(row):
-                if (tx, ty) == self.victory_tile:
-                    color = (50, 80, 110)
-                else:
-                    color = (20, 20, 20)
+                color = (20, 20, 20)
                 if tile is not None and tile.is_wall():
                     wip = c.WALL_INSET_TILES*c.TILE_SIZE
                     pygame.draw.rect(surface, c.WHITE, (x-c.TILE_SIZE//2+wip, y-c.TILE_SIZE//2+wip, c.TILE_SIZE//1-2*wip, c.TILE_SIZE//1 -2*wip), 1)
@@ -87,6 +105,11 @@ class Grid:
                 x += c.TILE_SIZE
             y += c.TILE_SIZE
 
+        if self.tutorial_screen:
+            self.tutorial_screen.set_alpha(max(0, 100 - self.since_won*500 if self.won else 100))
+            surface.blit(self.tutorial_screen, (offset[0], offset[1]))
+
+
         y = y0
         for row in self.tiles:
             x = x0
@@ -96,6 +119,31 @@ class Grid:
                     grid_object.draw(surface, offset)
                 x += c.TILE_SIZE
             y += c.TILE_SIZE
+
+        if self.won:
+            through_flash = min(max(((self.since_won - 0.15) * 1.5), 0), 1)
+            flash_alpha = min(through_flash*1000, (1 - through_flash)**1.5 * 255)
+            flash_scale = 0.75+0.75*through_flash**0.5
+            flash_scaled = pygame.transform.scale(self.flash, (self.flash.get_width()*flash_scale, self.flash.get_height()*flash_scale))
+            darken = pygame.Surface((flash_scaled.get_width(), flash_scaled.get_height()))
+            darken.fill((0, 0, 0))
+            darken.set_alpha(255 - flash_alpha)
+            flash_scaled.blit(darken, (0, 0))
+            x = c.CENTER_X + ((self.victory_tile[0] + 1) * c.TILE_SIZE)/2 - flash_scaled.get_width() + offset[0]
+            y = c.CENTER_Y - flash_scaled.get_height()//2 + offset[1]
+            surface.blit(flash_scaled, (x, y), special_flags=pygame.BLEND_ADD)
+
+        if not self.won or self.since_won < 0.25:
+            glow = self.exit_glow.copy()
+            dark = pygame.Surface((glow.get_width(), glow.get_height()))
+            dark.fill(c.BLACK)
+            dark.set_alpha(50 + 50 * math.sin(time.time()*1.5))
+            glow.blit(dark, (0, 0))
+            x = c.CENTER_X + ((self.victory_tile[0] + 1) * c.TILE_SIZE)/2 - glow.get_width() + offset[0]
+            y = c.CENTER_Y - glow.get_height()//2 + offset[1]
+            surface.blit(glow, (x, y), special_flags=pygame.BLEND_ADD)
+            pass
+
 
     def all_grid_objects(self):
         for grop in self.all_grid_objects_and_position():
@@ -134,6 +182,9 @@ class Grid:
                     for obj in good_tiles:
                         obj.part_of_hope=True
 
+    def apply_mouse_offset(self, mpos):
+        return mpos[0] - self.offset[0], mpos[1] - self.offset[1]
+
     def update(self, dt, events):
         if self.won:
             self.since_won += dt
@@ -142,7 +193,7 @@ class Grid:
             self.win_shake_occurred = True
         for grid_object in self.all_grid_objects():
             grid_object.update(dt, events)
-        mpos = pygame.mouse.get_pos()
+        mpos = self.apply_mouse_offset(pygame.mouse.get_pos())
         self.update_hovered_statuses(mpos)
 
         for event in events:
@@ -152,6 +203,8 @@ class Grid:
                 if self.hovered_object(mpos):
                     self.grab()
             if event.type == pygame.MOUSEBUTTONUP:
+                if event.button!=1:
+                    continue
                 if self.grabbed_tile:
                     self.release()
 
@@ -228,16 +281,14 @@ class Grid:
         self.victory_objects = grabbed_objects[:4]
         self.release()
 
-        print("YAY!")
-
     def ready_for_next(self):
-        return self.won and self.since_won > 2
+        return self.won and self.since_won > 1
 
 
     def grab(self):
         if self.won:
             return
-        mpos = pygame.mouse.get_pos()
+        mpos = self.apply_mouse_offset(pygame.mouse.get_pos())
         self.regrab(mpos)
         self.grabbed_objects = []
         self.grabbed_shape = None
@@ -292,7 +343,7 @@ class Grid:
 
 
     def update_dragging(self):
-        mpos = list(pygame.mouse.get_pos())
+        mpos = list(self.apply_mouse_offset(pygame.mouse.get_pos()))
         if self.grabbed_tile:
 
             test_positions = [(mpos[0], self.grab_position[1]), (self.grab_position[0], mpos[1])]
@@ -336,7 +387,9 @@ class Grid:
                     self.grabbed_shape = self.move_tile_contents(grabbed_shape, direction)
                     self.regrab(mpos)
                     self.drag_direction = c.VERTICAL if old[0] == tx else c.HORIZONTAL
-
+                    obstruction = self.calculate_obstruction(self.grabbed_shape, direction)
+                    if obstruction:
+                        self.frame.shake(3, 0.13)
                     break
 
     def calculate_obstruction(self, tile_list, direction):
@@ -526,7 +579,7 @@ class GridObject:
         if None in {self.x, self.y, self.target_x, self.target_y}:
             return
 
-        start_shloop = 0.75
+        start_shloop = 0
         if self.grid.won and self in self.grid.victory_objects and self.grid.since_won>start_shloop:
             vel = (self.grid.since_won - start_shloop) * 2000 + 1500
             self.target_x += vel*dt
@@ -545,7 +598,7 @@ class GridObject:
         self.age += dt
 
     def set_target_position_on_grid(self, x, y):
-        if not (self.grid.won and self in self.grid.victory_objects and self.grid.since_won>0.5):
+        if not (self.grid.won and self in self.grid.victory_objects):
             self.target_x = x
             if not self.x:
                 self.x = x

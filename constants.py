@@ -8,7 +8,7 @@ CENTER_Y = WINDOW_HEIGHT//2
 
 FRAMERATE=60
 
-CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ|* "
+CHARS='"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz|* '
 VICTORY_CHAR = "*"
 WALL_CHAR = "|"
 
@@ -31,6 +31,9 @@ RIGHT = (1, 0)
 LEVELS = [
     "test_level.txt",
     "level_1.txt",
+    "level_1.5.txt",
     "level_2.txt",
+    "level_2.5.txt",
+    "level_2.75.txt",
     "level_3.txt",
 ]
