@@ -213096,8 +213096,6 @@ opaquing
 opata
 opcode
 opdalite
-opec
-oped
 opedeldoc
 opegrapha
 opeidoscope

@@ -3,6 +3,7 @@ import sys
 import random
 import time
 import math
+import constants as c
 
 
 class Button:
@@ -36,6 +37,11 @@ class Button:
         if on_click_args==None:
             on_click_args=()
         self.on_click_args = on_click_args
+
+        self.font = pygame.font.Font("assets/fonts/Rudiment.ttf",35)
+        self.font_cache = {char:self.font.render(char,1,c.WHITE) for char in c.CHARS}
+        self.font_cache_disabled = {char:self.font.render(char,1,(50, 50, 50)) for char in c.CHARS}
+        self.font_cache_hover = {char:self.font.render(char,1,c.YELLOW) for char in c.CHARS}
 
     def click(self):
         if not self.enabled:
@@ -87,6 +93,24 @@ class Button:
         x = self.x - surf.get_width() * self.scale/2 + xoff
         y = self.y - surf.get_height() * self.scale/2 + yoff
         surface.blit(self.get_surf(), (x, y))
+
+        if not self.text:
+            return
+        if not self.enabled:
+            font_cache = self.font_cache_disabled
+        elif self.is_hovered():
+            font_cache = self.font_cache_hover
+        else:
+            font_cache = self.font_cache
+        chars = [font_cache[letter] for letter in self.text]
+        width = sum([char.get_width() for char in chars])
+        x = self.x - width//2 + xoff
+        y = self.y - chars[0].get_height()//2 + yoff
+        for char in chars:
+            surface.blit(char, (x, y))
+            x += char.get_width()
+
+
 
     def update(self, dt, events):
         for event in events:

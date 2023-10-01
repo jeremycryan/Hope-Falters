@@ -41,12 +41,16 @@ class Grid:
             self.tutorial_screen = ImageManager.load("assets/images/beginnings_help.png")
         if path=="two_letters.txt":
             self.tutorial_screen = ImageManager.load("assets/images/two_letter_help.png")
+        if path=="level_2.5.txt":
+            self.tutorial_screen = ImageManager.load("assets/images/breakaway_help.png")
 
         self.flash = ImageManager.load("assets/images/flash.png")
         self.flash.set_alpha(0)
 
         self.exit_glow = ImageManager.load("assets/images/exit_glow.png")
         self.exit_glow.set_alpha(0)
+
+        self.last_scrape = 0
 
     def load_from_file(self, path):
         with open(path) as f:
@@ -177,6 +181,7 @@ class Grid:
                 yield grid_object, x, y
 
     def update_hopeness(self):
+        hope_exists = False
         for obj in self.all_grid_objects():
             obj.part_of_hope = False
         for obj, x, y in self.all_grid_objects_and_position():
@@ -201,6 +206,11 @@ class Grid:
                 if good_tiles:
                     for obj in good_tiles:
                         obj.part_of_hope=True
+                        hope_exists = True
+        if hope_exists:
+            self.frame.game.raise_music()
+        else:
+            self.frame.game.lower_music()
 
     def apply_mouse_offset(self, mpos):
         return mpos[0] - self.offset[0], mpos[1] - self.offset[1]
@@ -231,6 +241,8 @@ class Grid:
         self.update_dragging()
         self.check_victory()
         self.update_hopeness()
+
+        self.last_scrape += dt
 
 
 
@@ -411,7 +423,9 @@ class Grid:
                     obstruction = self.calculate_obstruction(self.grabbed_shape, direction)
                     if obstruction:
                         self.frame.shake(3, 0.13, self.thunk)
-                    self.scrape.play()
+                    if self.last_scrape > 0.06:
+                        self.scrape.play()
+                        self.last_scrape = 0
                     break
 
 
