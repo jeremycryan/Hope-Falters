@@ -7,6 +7,7 @@ import constants as c
 
 from grid import Grid
 from image_manager import ImageManager
+from pyracy.sprite_tools import Sprite, Animation
 
 
 class Frame:
@@ -30,7 +31,7 @@ class Frame:
 class LevelFrame(Frame):
     def __init__(self, game):
         super().__init__(game)
-        self.grid = Grid(c.LEVELS[self.game.active_level], self, offset = (100, 0))
+        self.grid = Grid(c.LEVELS[self.game.active_level], self, offset = (130, 0))
         self.shake_amp = 0
         self.since_shake = 999
         self.delayed_shakes = []
@@ -39,6 +40,12 @@ class LevelFrame(Frame):
         self.wiper = ImageManager.load("assets/images/wiper.png")
         self.left_wiper = pygame.transform.flip(self.wiper, True, True)
         self.age = 0
+
+        self.woman_sprite = Sprite(8, (0, 0))
+        woman_animation = ImageManager.load("assets/images/human_test.png")
+        animation = Animation(woman_animation, (4, 1), 4)
+        self.woman_sprite.add_animation({"Idle":animation},loop=True)
+        self.woman_sprite.start_animation("Idle")
 
     def draw(self, surface, offset=(0, 0)):
         super().draw(surface, offset)
@@ -66,6 +73,9 @@ class LevelFrame(Frame):
                 pygame.draw.rect(surface, c.BLACK, (0, 0, x_left, c.WINDOW_HEIGHT))
             print(x_left)
 
+        surf = self.woman_sprite.get_image()
+        surface.blit(surf, (offset[0], offset[1]))
+
     def update(self, dt, events):
         super().update(dt, events)
         self.age += dt
@@ -87,6 +97,8 @@ class LevelFrame(Frame):
 
         if self.switching_out:
             self.since_switching_out += dt
+
+        self.woman_sprite.update(dt, events)
 
     def next_frame(self):
         return LevelFrame(self.game)

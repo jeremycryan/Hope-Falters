@@ -94,7 +94,7 @@ class Grid:
             x = x0
             for tx, tile in enumerate(row):
                 color = (20, 20, 20)
-                if tile is not None and tile.is_wall():
+                if False:#tile is not None and tile.is_wall():
                     wip = c.WALL_INSET_TILES*c.TILE_SIZE
                     pygame.draw.rect(surface, c.WHITE, (x-c.TILE_SIZE//2+wip, y-c.TILE_SIZE//2+wip, c.TILE_SIZE//1-2*wip, c.TILE_SIZE//1 -2*wip), 1)
                 else:
@@ -143,6 +143,11 @@ class Grid:
             y = c.CENTER_Y - glow.get_height()//2 + offset[1]
             surface.blit(glow, (x, y), special_flags=pygame.BLEND_ADD)
             pass
+
+        height = c.TILE_SIZE
+        x = c.CENTER_X + ((self.victory_tile[0] + 1) * c.TILE_SIZE) / 2 + offset[0] + 5
+        y = c.CENTER_Y + offset[1] - height/2
+        pygame.draw.rect(surface, c.BLACK, (x, y, 400, height))
 
 
     def all_grid_objects(self):
@@ -499,6 +504,10 @@ class GridObject:
         self.grabbed = False
         self.hovered = False
 
+        if self.is_wall():
+            self.surf = ImageManager.load("assets/images/wall.png")
+            self.hover_surf = self.surf
+
         self.x_off = 0  # in grid tiles
         self.y_off = 0
         self.part_of_hope = False
@@ -519,8 +528,6 @@ class GridObject:
             self.glows[char] = surf
 
     def draw(self, surface, offset=(0, 0)):
-        if self.character == c.WALL_CHAR:
-            return
 
         if self.x == None:
             self.x = offset[0]

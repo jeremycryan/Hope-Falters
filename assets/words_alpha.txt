@@ -19378,9 +19378,7 @@ areotectonics
 arere
 arerola
 areroscope
-ares
 arest
-aret
 aretaics
 aretalogy
 arete
@@ -19391,10 +19389,8 @@ arethuse
 aretinian
 arette
 arew
-arf
 arfillite
 arfvedsonite
-arg
 argaile
 argal
 argala
@@ -49585,8 +49581,6 @@ catfoot
 catfooted
 catgut
 catguts
-cath
-catha
 cathay
 cathayan
 cathar
@@ -90680,7 +90674,6 @@ documenting
 documentize
 documentor
 documents
-dod
 dodd
 doddard
 doddart
@@ -96610,8 +96603,6 @@ ektenes
 ektexine
 ektexines
 ektodynamorphic
-el
-ela
 elabor
 elaborate
 elaborated
@@ -135390,7 +135381,6 @@ hektograph
 hektoliter
 hektometer
 hektostere
-hel
 helas
 helbeh
 helco
@@ -158586,7 +158576,6 @@ ischury
 ischuria
 iscose
 isdn
-ise
 ised
 isegrim
 isenergic
@@ -158694,7 +158683,6 @@ ismaticalness
 ismdom
 ismy
 isms
-isn
 isnad
 isnardia
 isnt
@@ -162698,7 +162686,6 @@ kahu
 kahuna
 kahunas
 kai
-kay
 kaiak
 kayak
 kayaker
@@ -169442,7 +169429,6 @@ ld
 ldg
 ldinfo
 le
-lea
 leach
 leachability
 leachable
@@ -211877,8 +211863,6 @@ oiticicas
 ojibwa
 ojibway
 ojibwas
-ok
-oka
 okay
 okayed
 okaying
@@ -211969,7 +211953,6 @@ oldwench
 oldwife
 oldwives
 ole
-olea
 oleaceae
 oleaceous
 oleacina
@@ -244920,20 +244903,6 @@ pozzolanic
 pozzolans
 pozzuolana
 pozzuolanic
-pp
-ppa
-ppb
-ppd
-pph
-ppi
-ppl
-ppm
-ppr
-pps
-ppt
-pptn
-pq
-pr
 praam
 praams
 prabble
@@ -268855,7 +268824,6 @@ rerummage
 rerun
 rerunning
 reruns
-res
 resaca
 resack
 resacrifice
@@ -285813,7 +285781,6 @@ sercom
 serdab
 serdabs
 serdar
-sere
 serean
 sered
 sereh
@@ -364028,7 +363995,6 @@ wenzel
 wepman
 wepmankin
 wept
-wer
 werchowinci
 were
 wereass
@@ -366269,10 +366235,6 @@ wirr
 wirra
 wirrah
 wirrasthru
-wis
-wisconsin
-wisconsinite
-wisconsinites
 wisdom
 wisdomful
 wisdomless

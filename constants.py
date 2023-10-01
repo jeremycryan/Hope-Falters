@@ -36,4 +36,5 @@ LEVELS = [
     "level_2.5.txt",
     "level_2.75.txt",
     "level_3.txt",
+    "level_4.txt",
 ]
