@@ -2,6 +2,7 @@ from image_manager import ImageManager
 from pyracy.sprite_tools import Sprite, Animation
 import pygame
 import constants as c
+from sound_manager import SoundManager
 from word_manager import WordManager
 import math, time
 
@@ -9,6 +10,12 @@ class Grid:
     pass
 
     def __init__(self, path, frame, offset):
+        self.scrape = SoundManager.load("assets/sound/scrape.wav")
+        self.thunk = SoundManager.load("assets/sound/thunk.wav")
+        self.thunk.set_volume(0.2)
+        self.scrape.set_volume(0.08)
+        self.whoosh = SoundManager.load("assets/sound/whoosh.wav")
+        self.whoosh.set_volume(0.8)
         self.offset = offset
         self.victory_tile = None
         self.grabbed_tile = None
@@ -19,6 +26,7 @@ class Grid:
         self.title_font_dict = {char: title_font.render(char,True,(255, 255, 0)) for char in c.CHARS}
         self.title = ""
         self.width, self.height = self.load_from_file(f"levels/{path}")
+        self.flash_alpha = 0
 
         self.won = False
         self.victory_objects = []
@@ -31,6 +39,8 @@ class Grid:
         self.tutorial_screen = None
         if path=="test_level.txt":
             self.tutorial_screen = ImageManager.load("assets/images/beginnings_help.png")
+        if path=="two_letters.txt":
+            self.tutorial_screen = ImageManager.load("assets/images/two_letter_help.png")
 
         self.flash = ImageManager.load("assets/images/flash.png")
         self.flash.set_alpha(0)
@@ -41,6 +51,10 @@ class Grid:
     def load_from_file(self, path):
         with open(path) as f:
             self.title = f.readline().strip()
+            self.hints = f.readline().strip().split(",")
+            self.hints = [hint.upper() for hint in self.hints]
+            while "NONE" in self.hints:
+                self.hints.remove("NONE")
             lines = [line.strip() for line in f.readlines()]
         width = len(lines[0])
         height = len(lines)
@@ -129,6 +143,7 @@ class Grid:
             darken.fill((0, 0, 0))
             darken.set_alpha(255 - flash_alpha)
             flash_scaled.blit(darken, (0, 0))
+            self.flash_alpha = flash_alpha
             x = c.CENTER_X + ((self.victory_tile[0] + 1) * c.TILE_SIZE)/2 - flash_scaled.get_width() + offset[0]
             y = c.CENTER_Y - flash_scaled.get_height()//2 + offset[1]
             surface.blit(flash_scaled, (x, y), special_flags=pygame.BLEND_ADD)
@@ -285,6 +300,7 @@ class Grid:
         grabbed_objects.sort(key=lambda tile: -tile.x)
         self.victory_objects = grabbed_objects[:4]
         self.release()
+        self.whoosh.play()
 
     def ready_for_next(self):
         return self.won and self.since_won > 1
@@ -394,8 +410,10 @@ class Grid:
                     self.drag_direction = c.VERTICAL if old[0] == tx else c.HORIZONTAL
                     obstruction = self.calculate_obstruction(self.grabbed_shape, direction)
                     if obstruction:
-                        self.frame.shake(3, 0.13)
+                        self.frame.shake(3, 0.13, self.thunk)
+                    self.scrape.play()
                     break
+
 
     def calculate_obstruction(self, tile_list, direction):
         if direction == c.UP:

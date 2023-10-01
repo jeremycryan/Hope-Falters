@@ -76841,7 +76841,6 @@ dapples
 dappling
 daps
 dapson
-dar
 darabukka
 darac
 daraf
@@ -78909,7 +78908,6 @@ deductory
 deducts
 deduit
 deduplication
-dee
 deecodder
 deed
 deedbote
@@ -94921,12 +94919,10 @@ eater
 eatery
 eateries
 eaters
-eath
 eathly
 eating
 eatings
 eats
-eau
 eaux
 eave
 eaved
@@ -128124,7 +128120,6 @@ gorsiest
 gorst
 gortonian
 gortonite
-gos
 gosain
 goschen
 goschens
@@ -133019,7 +133014,6 @@ hamza
 hamzah
 hamzahs
 hamzas
-han
 hanafi
 hanafite
 hanahill
@@ -133319,7 +133313,6 @@ hanif
 hanifiya
 hanifism
 hanifite
-hank
 hanked
 hanker
 hankered
@@ -133334,7 +133327,6 @@ hankie
 hankies
 hanking
 hankle
-hanks
 hanksite
 hankt
 hankul
@@ -144134,7 +144126,6 @@ hospodar
 hospodariat
 hospodariate
 hospodars
-hoss
 host
 hosta
 hostage
@@ -171892,7 +171883,6 @@ liftmen
 liftoff
 liftoffs
 lifts
-lig
 ligable
 lygaeid
 lygaeidae
@@ -195734,8 +195724,6 @@ muruxi
 murva
 murza
 murzim
-mus
-musa
 musaceae
 musaceous
 musaeus
@@ -195856,7 +195844,6 @@ museful
 musefully
 musefulness
 museist
-museless
 muselessness
 muselike
 museographer
@@ -199773,7 +199760,6 @@ niftier
 nifties
 niftiest
 niftiness
-nig
 nigel
 nigella
 nigeria
@@ -199794,20 +199780,6 @@ niggardling
 niggardness
 niggards
 nigged
-nigger
-niggerdom
-niggered
-niggerfish
-niggerfishes
-niggergoose
-niggerhead
-niggery
-niggerish
-niggerism
-niggerling
-niggers
-niggertoe
-niggerweed
 nigget
 nigging
 niggle
@@ -239904,8 +239876,6 @@ plexors
 plexure
 plexus
 plexuses
-plf
-pli
 ply
 pliability
 pliable
@@ -243611,7 +243581,6 @@ porulous
 porus
 porwigle
 porzana
-pos
 posable
 posada
 posadas
@@ -243685,7 +243654,6 @@ posologies
 posologist
 posostemad
 pospolite
-poss
 posse
 posseman
 possemen
@@ -260680,7 +260648,6 @@ rarish
 rarity
 rarities
 rarotongan
-ras
 rasa
 rasalas
 rasalhague
@@ -288451,8 +288418,6 @@ shmo
 shmoes
 shnaps
 shnook
-sho
-shoa
 shoad
 shoader
 shoal
@@ -289315,7 +289280,6 @@ siamese
 siameses
 siamoise
 siauliai
-sib
 sybarism
 sybarist
 sybarital
@@ -319011,8 +318975,6 @@ tequilas
 tequilla
 tequistlateca
 tequistlatecan
-ter
-tera
 teraglin
 terahertz
 terahertzes
@@ -320247,12 +320209,8 @@ tezcatzoncatl
 tezcucan
 tezkere
 tezkirah
-tfr
 tg
-tgn
-tgt
 th
-tha
 thack
 thacked
 thacker
@@ -326228,7 +326186,6 @@ torve
 torvid
 torvity
 torvous
-tos
 tosaphist
 tosaphoth
 tosca

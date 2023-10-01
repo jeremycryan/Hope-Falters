@@ -3,6 +3,8 @@ import pygame
 import constants as c
 import frame as f
 import sys
+
+from LevelFileManager import LevelFileManager
 from sound_manager import SoundManager
 from image_manager import ImageManager
 from word_manager import WordManager
@@ -21,7 +23,12 @@ class Game:
         self.windowed = False
         self.clicked = False
         self.active_level = 0
+
+        pygame.mixer.music.load("assets/sound/LD54.ogg")
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(-1)
         asyncio.run(self.main())
+
 
     async def main(self):
         current_frame = f.LevelFrame(self)
@@ -42,6 +49,7 @@ class Game:
             pygame.display.flip()
 
             if current_frame.done:
+                LevelFileManager.save()
                 current_frame = current_frame.next_frame()
                 current_frame.load()
 

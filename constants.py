@@ -8,7 +8,7 @@ CENTER_Y = WINDOW_HEIGHT//2
 
 FRAMERATE=60
 
-CHARS='"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz|* '
+CHARS='"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890|* '
 VICTORY_CHAR = "*"
 WALL_CHAR = "|"
 
@@ -33,8 +33,15 @@ LEVELS = [
     "level_1.txt",
     "level_1.5.txt",
     "level_2.txt",
+    "two_letters.txt",
     "level_2.5.txt",
     "level_2.75.txt",
+    "impossible.txt",
     "level_3.txt",
+    "deep_breath.txt",
     "level_4.txt",
+    "thanks.txt",
 ]
+
+LIGHT_YELLOW = (255, 255, 128)
+GRAY_BLUE = (150, 150, 200)
