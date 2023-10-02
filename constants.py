@@ -1,3 +1,10 @@
+import sys
+
+def is_web_build():
+    return sys.platform == "emscripten"
+
+
+
 CAPTION = "Hope Falters"
 
 WINDOW_WIDTH=1280

@@ -1,3 +1,4 @@
+from LevelLoader import LevelLoader
 from image_manager import ImageManager
 from pyracy.sprite_tools import Sprite, Animation
 import pygame
@@ -10,11 +11,12 @@ class Grid:
     pass
 
     def __init__(self, path, frame, offset):
-        self.scrape = SoundManager.load("assets/sound/scrape.wav")
-        self.thunk = SoundManager.load("assets/sound/thunk.wav")
+        self.frame = frame
+        self.scrape = SoundManager.load("assets/sound/scrape.ogg")
+        self.thunk = SoundManager.load("assets/sound/thunk.ogg")
         self.thunk.set_volume(0.2)
         self.scrape.set_volume(0.08)
-        self.whoosh = SoundManager.load("assets/sound/whoosh.wav")
+        self.whoosh = SoundManager.load("assets/sound/whoosh.ogg")
         self.whoosh.set_volume(0.8)
         self.offset = offset
         self.victory_tile = None
@@ -25,13 +27,12 @@ class Grid:
         title_font = pygame.font.Font("assets/fonts/Rudiment.ttf", 30)
         self.title_font_dict = {char: title_font.render(char,True,(255, 255, 0)) for char in c.CHARS}
         self.title = ""
-        self.width, self.height = self.load_from_file(f"levels/{path}")
+        self.width, self.height = self.load_from_file()
         self.flash_alpha = 0
 
         self.won = False
         self.victory_objects = []
         self.since_won = 0
-        self.frame = frame
         self.win_shake_occurred = False
 
         self.title_letters = [self.title_font_dict[char] for char in f'"{self.title}"']
@@ -39,10 +40,13 @@ class Grid:
         self.tutorial_screen = None
         if path=="test_level.txt":
             self.tutorial_screen = ImageManager.load("assets/images/beginnings_help.png")
+            self.tutorial_pos = (325, 245)
         if path=="two_letters.txt":
             self.tutorial_screen = ImageManager.load("assets/images/two_letter_help.png")
+            self.tutorial_pos = (400, 225)
         if path=="level_2.5.txt":
             self.tutorial_screen = ImageManager.load("assets/images/breakaway_help.png")
+            self.tutorial_pos = (838, 16)
 
         self.flash = ImageManager.load("assets/images/flash.png")
         self.flash.set_alpha(0)
@@ -52,14 +56,8 @@ class Grid:
 
         self.last_scrape = 0
 
-    def load_from_file(self, path):
-        with open(path) as f:
-            self.title = f.readline().strip()
-            self.hints = f.readline().strip().split(",")
-            self.hints = [hint.upper() for hint in self.hints]
-            while "NONE" in self.hints:
-                self.hints.remove("NONE")
-            lines = [line.strip() for line in f.readlines()]
+    def load_from_file(self):
+        self.title, self.hints, lines = LevelLoader.load_level(self.frame.game.active_level)
         width = len(lines[0])
         height = len(lines)
 
@@ -124,8 +122,10 @@ class Grid:
             y += c.TILE_SIZE
 
         if self.tutorial_screen:
+            x = offset[0] + self.tutorial_pos[0]
+            y = offset[1] + self.tutorial_pos[1]
             self.tutorial_screen.set_alpha(max(0, 100 - self.since_won*500 if self.won else 100))
-            surface.blit(self.tutorial_screen, (offset[0], offset[1]))
+            surface.blit(self.tutorial_screen, (x, y))
 
 
         y = y0

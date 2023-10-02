@@ -5,6 +5,7 @@ import frame as f
 import sys
 
 from LevelFileManager import LevelFileManager
+from LevelLoader import LevelLoader
 from sound_manager import SoundManager
 from image_manager import ImageManager
 from word_manager import WordManager
@@ -13,10 +14,11 @@ import asyncio
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.mixer.set_num_channels(10)
+        pygame.mixer.pre_init(buffer=256, channels=4)
         SoundManager.init()
         ImageManager.init()
         WordManager.init()
+        LevelLoader.init()
         LevelFileManager.init()
         self.screen = pygame.display.set_mode(c.WINDOW_SIZE)
         pygame.display.set_caption(c.CAPTION)
@@ -27,12 +29,37 @@ class Game:
         self.just_reset = False
         self.last_level = 0
 
+        SoundManager.load("assets/sound/whoosh.ogg")
+        SoundManager.load("assets/sound/flip.ogg")
+        ImageManager.load("assets/images/title_animation.png")
+        ImageManager.load("assets/images/human_test.png")
+        ImageManager.load("assets/images/wiper.png")
+        ImageManager.load("assets/images/reset_button.png")
+        ImageManager.load("assets/images/reset_button_hover.png")
+        ImageManager.load("assets/images/hint_button.png")
+        ImageManager.load("assets/images/hint_button_hover.png")
+        ImageManager.load("assets/images/hint_button_disabled.png")
+        ImageManager.load_copy("assets/images/hint_frame.png")
+        SoundManager.load("assets/sound/scrape.ogg")
+        SoundManager.load("assets/sound/thunk.ogg")
+        ImageManager.load("assets/images/flash.png")
+        ImageManager.load("assets/images/exit_glow.png")
+        ImageManager.load("assets/images/beginnings_help.png")
+        ImageManager.load("assets/images/two_letter_help.png")
+        ImageManager.load("assets/images/breakaway_help.png")
+        ImageManager.load("assets/images/h_glow.png")
+        ImageManager.load("assets/images/o_glow.png")
+        ImageManager.load("assets/images/p_glow.png")
+        ImageManager.load("assets/images/e_glow.png")
+        ImageManager.load("assets/images/select_a_level.png")
+        ImageManager.load("assets/images/small_star.png")
+        ImageManager.load("assets/images/medium_star.png")
+        ImageManager.load("assets/images/wall.png")
+
         self.music_full = pygame.mixer.Sound("assets/sound/LD54.ogg")
         self.music_full.set_volume(0.3)
         self.music_lowpass = pygame.mixer.Sound("assets/sound/LD54_lowpass.ogg")
         self.music_lowpass.set_volume(0)
-        self.music_full.play(-1)
-        self.music_lowpass.play(-1)
 
         self.music_state = 1
         self.target_music_state = 1
@@ -42,7 +69,7 @@ class Game:
 
     def update_music_volumes(self, dt, events):
         self.music_full.set_volume(0.3*self.music_state)
-        self.music_lowpass.set_volume(0.3*(1-self.music_state))
+        self.music_lowpass.set_volume(0.5*(1-self.music_state))
         if self.music_state > self.target_music_state:
             self.music_state -= 2*dt
             if self.music_state < 0:
@@ -69,7 +96,7 @@ class Game:
             await asyncio.sleep(0)
             if dt == 0:
                 dt = 1/100000
-            pygame.display.set_caption(f"{c.CAPTION} ({int(1/dt)} FPS)")
+            pygame.display.set_caption(f"{c.CAPTION} ({int(1/dt)} FPS) " + ("(web)" if c.is_web_build() else ""))
             if dt > 0.05:
                 dt = 0.05
             current_frame.update(dt, events)

@@ -36,7 +36,9 @@ class Frame:
 
 
 class LevelSelect(Frame):
-    def load(self):
+    def __init__(self, game):
+
+        super().__init__(game)
         self.woman_sprite = Sprite(8, (0, 0))
         woman_animation = ImageManager.load("assets/images/human_test.png")
         animation = Animation(woman_animation, (4, 1), 4)
@@ -53,18 +55,17 @@ class LevelSelect(Frame):
         self.title_yoff = 0
         self.title_speed = 0
         self.since_click = 0
-        self.flip = SoundManager.load("assets/sound/flip.wav")
+        self.flip = SoundManager.load("assets/sound/flip.ogg")
 
         self.dark = pygame.Surface(c.WINDOW_SIZE)
         self.dark.fill((c.BLACK))
         self.dark_alpha = 255
 
-        self.whoosh = SoundManager.load("assets/sound/whoosh.wav")
+        self.whoosh = SoundManager.load("assets/sound/whoosh.ogg")
         self.whoosh.set_volume(0.8)
 
         self.buttons = []
         self.generate_buttons()
-        print(self.buttons)
 
     def generate_buttons(self):
         spacing = 200
@@ -159,20 +160,31 @@ class TitleFrame(Frame):
         self.title_yoff = 0
         self.title_speed = 0
         self.since_click = 0
-        self.flip = SoundManager.load("assets/sound/flip.wav")
+        self.flip = SoundManager.load("assets/sound/flip.ogg")
 
         self.dark = pygame.Surface(c.WINDOW_SIZE)
         self.dark.fill((c.BLACK))
         self.dark_alpha = 255
 
-        self.whoosh = SoundManager.load("assets/sound/whoosh.wav")
+        self.whoosh = SoundManager.load("assets/sound/whoosh.ogg")
         self.whoosh.set_volume(0.8)
+
+        self.since_start = 0
+        self.music_started = False
+
+        self.next_frame_cache = LevelSelect(self.game)
 
     def update(self, dt, events):
         self.woman_sprite.update(dt, events)
         self.title_sprite.update(dt, events)
 
-        if self.clicked:
+        self.since_start += dt
+        if self.since_start > 1 and not self.music_started:
+            self.game.music_full.play(-1)
+            self.game.music_lowpass.play(-1)
+            self.music_started = True
+
+        if self.clicked and self.music_started:
             self.since_click += dt
             self.title_yoff = self.since_click * 600 - self.since_click**2 * 6000
 
@@ -190,8 +202,9 @@ class TitleFrame(Frame):
     def click(self):
         if self.dark_alpha> 0:
             return
-        self.clicked = True
-        self.whoosh.play()
+        if self.since_start > 1:
+            self.clicked = True
+            self.whoosh.play()
 
     def draw(self, surface, offset=(0, 0)):
         super().draw(surface, offset)
@@ -209,7 +222,7 @@ class TitleFrame(Frame):
         surface.blit(self.dark, (0, 0))
 
     def next_frame(self):
-        return LevelSelect(self.game)
+        return self.next_frame_cache
 
 
 
@@ -255,7 +268,7 @@ class LevelFrame(Frame):
         else:
             LevelFrame.HINT_SHOWING= False
 
-        self.flip = SoundManager.load("assets/sound/flip.wav")
+        self.flip = SoundManager.load("assets/sound/flip.ogg")
 
         LevelFrame.STAR_MANAGER = StarManager()
         for i in range(50):
