@@ -7,6 +7,12 @@ import constants as c
 
 
 class Button:
+
+    FONT = None
+    FONT_CACHE = None
+    FONT_CACHE_DISABLED = None
+    FONT_CACHE_HOVER = None
+
     def __init__(self,
                  surf,
                  pos,
@@ -38,10 +44,15 @@ class Button:
             on_click_args=()
         self.on_click_args = on_click_args
 
-        self.font = pygame.font.Font("assets/fonts/Rudiment.ttf",35)
-        self.font_cache = {char:self.font.render(char,1,c.WHITE) for char in c.CHARS}
-        self.font_cache_disabled = {char:self.font.render(char,1,(50, 50, 50)) for char in c.CHARS}
-        self.font_cache_hover = {char:self.font.render(char,1,c.YELLOW) for char in c.CHARS}
+        if text and not Button.FONT:
+            Button.pre_init()
+
+    @staticmethod
+    def pre_init():
+        Button.FONT = pygame.font.Font("assets/fonts/Rudiment.ttf", 35)
+        Button.FONT_CACHE = {char: Button.FONT.render(char, 1, c.WHITE) for char in c.CHARS}
+        Button.FONT_CACHE_DISABLED = {char: Button.FONT.render(char, 1, (50, 50, 50)) for char in c.CHARS}
+        Button.FONT_CACHE_HOVER = {char: Button.FONT.render(char, 1, c.YELLOW) for char in c.CHARS}
 
     def click(self):
         if not self.enabled:
@@ -97,11 +108,11 @@ class Button:
         if not self.text:
             return
         if not self.enabled:
-            font_cache = self.font_cache_disabled
+            font_cache = self.FONT_CACHE_DISABLED
         elif self.is_hovered():
-            font_cache = self.font_cache_hover
+            font_cache = self.FONT_CACHE_HOVER
         else:
-            font_cache = self.font_cache
+            font_cache = self.FONT_CACHE
         chars = [font_cache[letter] for letter in self.text]
         width = sum([char.get_width() for char in chars])
         x = self.x - width//2 + xoff

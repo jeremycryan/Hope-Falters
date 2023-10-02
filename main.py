@@ -4,8 +4,10 @@ import constants as c
 import frame as f
 import sys
 
+from Button import Button
 from LevelFileManager import LevelFileManager
 from LevelLoader import LevelLoader
+from grid import GridObject, Grid
 from sound_manager import SoundManager
 from image_manager import ImageManager
 from word_manager import WordManager
@@ -14,7 +16,7 @@ import asyncio
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.mixer.pre_init(buffer=256, channels=4)
+        pygame.mixer.pre_init(buffer=1028, channels=4)
         SoundManager.init()
         ImageManager.init()
         WordManager.init()
@@ -28,6 +30,10 @@ class Game:
         self.active_level = 0
         self.just_reset = False
         self.last_level = 0
+
+        Grid.pre_init()
+        GridObject.pre_init()
+        Button.pre_init()
 
         SoundManager.load("assets/sound/whoosh.ogg")
         SoundManager.load("assets/sound/flip.ogg")
@@ -55,6 +61,7 @@ class Game:
         ImageManager.load("assets/images/small_star.png")
         ImageManager.load("assets/images/medium_star.png")
         ImageManager.load("assets/images/wall.png")
+        ImageManager.load("assets/images/left_wiper.png")
 
         self.music_full = pygame.mixer.Sound("assets/sound/LD54.ogg")
         self.music_full.set_volume(0.3)

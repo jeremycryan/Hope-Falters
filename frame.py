@@ -1,6 +1,7 @@
 import math
 import time
 import random
+import sys
 
 import pygame
 import asyncio
@@ -143,6 +144,8 @@ class LevelSelect(Frame):
 
 
 class TitleFrame(Frame):
+    DARK = None
+
     def load(self):
         self.woman_sprite = Sprite(8, (0, 0))
         woman_animation = ImageManager.load("assets/images/human_test.png")
@@ -162,8 +165,11 @@ class TitleFrame(Frame):
         self.since_click = 0
         self.flip = SoundManager.load("assets/sound/flip.ogg")
 
-        self.dark = pygame.Surface(c.WINDOW_SIZE)
-        self.dark.fill((c.BLACK))
+        if self.DARK:
+            self.dark = self.DARK
+        else:
+            self.dark = pygame.Surface(c.WINDOW_SIZE)
+            self.dark.fill((c.BLACK))
         self.dark_alpha = 255
 
         self.whoosh = SoundManager.load("assets/sound/whoosh.ogg")
@@ -230,15 +236,18 @@ class LevelFrame(Frame):
     HINT_SHOWING = False
 
     def __init__(self, game):
+        now = time.time()
+
         super().__init__(game)
         self.grid = Grid(c.LEVELS[self.game.active_level], self, offset = (130, 0))
+
         self.shake_amp = 0
         self.since_shake = 999
         self.delayed_shakes = []
         self.switching_out = False
         self.since_switching_out = 0
         self.wiper = ImageManager.load("assets/images/wiper.png")
-        self.left_wiper = pygame.transform.flip(self.wiper, True, True)
+        self.left_wiper = ImageManager.load("assets/images/left_wiper.png")
         self.age = 0
 
         self.woman_sprite = Sprite(8, (0, 0))

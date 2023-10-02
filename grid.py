@@ -8,7 +8,13 @@ from word_manager import WordManager
 import math, time
 
 class Grid:
-    pass
+    TITLE_FONT = None
+    TITLE_FONT_DICT = None
+
+    @staticmethod
+    def pre_init():
+        title_font = pygame.font.Font("assets/fonts/Rudiment.ttf", 30)
+        Grid.TITLE_FONT_DICT = {char: title_font.render(char,True,(255, 255, 0)) for char in c.CHARS}
 
     def __init__(self, path, frame, offset):
         self.frame = frame
@@ -24,8 +30,9 @@ class Grid:
         self.grab_position = None
         self.drag_direction = None
         self.grabbed_shape = None
-        title_font = pygame.font.Font("assets/fonts/Rudiment.ttf", 30)
-        self.title_font_dict = {char: title_font.render(char,True,(255, 255, 0)) for char in c.CHARS}
+        if not self.TITLE_FONT_DICT:
+            Grid.pre_init()
+        self.title_font_dict = Grid.TITLE_FONT_DICT
         self.title = ""
         self.width, self.height = self.load_from_file()
         self.flash_alpha = 0
@@ -518,16 +525,21 @@ class GridObject:
     HOPE_FONT_DICT = {}
     MAX_BUZZ = 1.5
 
-    def __init__(self, character, grid):
-        self.grid = grid
+    @staticmethod
+    def pre_init():
         if not GridObject.FONT:
             GridObject.FONT=pygame.font.Font("assets/fonts/Rudiment.ttf",40)
         if not GridObject.FONT_DICT:
-            GridObject.FONT_DICT = {char: self.FONT.render(char,True,(150, 150, 200)) for char in c.CHARS}
+            GridObject.FONT_DICT = {char: GridObject.FONT.render(char,True,(150, 150, 200)) for char in c.CHARS}
         if not GridObject.HOVER_FONT_DICT:
-            GridObject.HOVER_FONT_DICT = {char: self.FONT.render(char, True, c.YELLOW) for char in c.CHARS}
+            GridObject.HOVER_FONT_DICT = {char: GridObject.FONT.render(char, True, c.YELLOW) for char in c.CHARS}
         if not GridObject.HOPE_FONT_DICT:
-            GridObject.HOPE_FONT_DICT = {char: self.FONT.render(char, True, c.WHITE) for char in c.CHARS}
+            GridObject.HOPE_FONT_DICT = {char: GridObject.FONT.render(char, True, c.WHITE) for char in c.CHARS}
+
+    def __init__(self, character, grid):
+        self.grid = grid
+        if not GridObject.FONT:
+            GridObject.pre_init()
 
         self.character = character
         self.surf = self.FONT_DICT[character].copy()
